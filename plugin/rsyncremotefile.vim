@@ -1,3 +1,8 @@
+" File: rsyncremotefile.vim
+" Author: liujingyu
+" Description: 编辑后，一键保存并同步服务器项目文件
+" Last Modified: 三月 14, 2014
+"
 function! W2()
     if !exists('g:rdir')
         echo "Error: not remote dir"
