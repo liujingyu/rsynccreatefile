@@ -1,4 +1,6 @@
 本地编辑同步到服务器的运行环境
+" add author name in snips_author
+let g:snips_author = "liujingyu"
 =============================
 
 通过设置同步路径
@@ -13,3 +15,5 @@
 let g:rdir = "abc@example.com:/abc/"
 "设置本地路径
 let g:ldir = "~/abc/"
+
+

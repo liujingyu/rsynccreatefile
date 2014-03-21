@@ -4,6 +4,7 @@
 " Last Modified: 三月 14, 2014
 "
 function! W2()
+    exec "w"
     if !exists('g:rdir')
         echo "Error: not remote dir"
         finish
@@ -12,19 +13,19 @@ function! W2()
         echo "Error: not local dir"
         finish
     endif
-    let rdir = g:rdir
-    let ldir = expand(g:ldir)
-    let cdir = expand('%:p')
-    if ldir != matchstr(cdir, ldir, 0)
-        echo "Error: not rsync dir"
-        finish
-    endif 
+    "let rdir = g:rdir
+    for rdir in g:rdir
+        let ldir = expand(g:ldir)
+        let cdir = expand('%:p')
+        if ldir != matchstr(cdir, ldir, 0)
+            echo "Error: not rsync dir"
+            finish
+        endif
 
-    exec "w"
-
-    let rdirfile = substitute(cdir, ldir, rdir, "g")
-    let rsync = '!rsync '.cdir.' '.rdirfile
-    exec rsync
+        let rdirfile = substitute(cdir, ldir, rdir, "g")
+        let rsync = '!rsync '.cdir.' '.rdirfile
+        exec rsync
+    endfor
 
 endfunction
 
