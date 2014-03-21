@@ -11,6 +11,7 @@
 
 "设置远程路径
 let g:rdir = ["abc@example.com:/abc/", "other@example2.com:/abc/"]
+
 "设置本地路径
 let g:ldir = "~/abc/"
 
