@@ -8,10 +8,11 @@
 好处就是每次修改完提交省去一个命令，要是换了文件还得重新写命令,也省了。
 
 在.vimrc中配置同步的路径
+多项目同步
 
 "设置远程路径
 let g:rdir = ["abc@example.com:/abc/", "other@example2.com:/abc/"]
 
 "设置本地路径
-let g:ldir = "~/abc/"
+let g:ldir = ["~/abc/", '~/dbc/']
 

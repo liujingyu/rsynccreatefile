@@ -1,32 +1,55 @@
-" File: rsyncremotefile.vim
-" Author: liujingyu
-" Description: 编辑后，一键保存并同步服务器项目文件
-" Last Modified: 三月 14, 2014
-"
-function! W2()
-    exec "w"
-    if !exists('g:rdir')
-        echo "Error: not remote dir"
+function! RsyncProjects()
+    if !has('python')
+        echo "Error: Required vim compiled with +python"
         finish
     endif
-    if !exists('g:ldir')
-        echo "Error: not local dir"
-        finish
+
+    if !exists("g:rdir")
+        echo "undefine global rdir"
     endif
-    "let rdir = g:rdir
-    for rdir in g:rdir
-        let ldir = expand(g:ldir)
-        let cdir = expand('%:p')
-        if ldir != matchstr(cdir, ldir, 0)
-            echo "Error: not rsync dir"
-            finish
-        endif
 
-        let rdirfile = substitute(cdir, ldir, rdir, "g")
-        let rsync = '!rsync '.cdir.' '.rdirfile
-        exec rsync
-    endfor
+    if !exists("g:ldir")
+        echo "undefine local ldir"
+    endif
 
+python << EOF
+import vim
+
+vim.command("exec 'w'")
+
+#初始化
+aldir = []
+rpath = ''
+
+#获取全局变量
+rdir = vim.eval("g:rdir")
+ldir = vim.eval("g:ldir")
+
+#绝对本地路径
+for v in ldir:
+    apath = vim.eval('expand("%s")' % v)
+    aldir.append(apath)
+
+#获取当前操作路径
+cpath = vim.eval("expand('%:p')")
+
+length = 0
+maxcrdir = ''
+
+#本地绝对路径
+for k, adir in enumerate(aldir):
+    if cpath.startswith(adir):
+
+        if len(adir) > length:
+            length = len(adir)
+            maxcrdir = rdir[k]+cpath[length:]
+
+maxcrdir = '/'.join(filter(lambda x : x != '', maxcrdir.split('/')))
+cmd = " ".join(['!rsync', cpath, maxcrdir])
+vim.command('exec "%s"' % cmd)
+
+EOF
+" Here the python code is closed. We can continue writing VimL or python again.
 endfunction
 
-command! -nargs=0 W2 call W2()
+command! -nargs=0 W2 call RsyncProjects()
